@@ -19,8 +19,9 @@ AS3实现的简易Socket服务器和客户端，已经考虑到粘包的问题�
 ####客户端使用方法：
 <code><pre>s = new As3UTF8SocketClient("127.0.0.1",9999,function(msgFromServer:String):void{
 	trace(msgFromServer);
-});</pre></code>
-``` setTimeout(function():void{
+});
+setTimeout(function():void{
 	s.send("hello server");
 });
+</pre></code>
 
