@@ -8,7 +8,7 @@ package
 	{
 		public var PORT:int;
 		public var IP:String;
-		public function As3UTF8SocketServer(PORT:int=9999, IP:String="127.0.0.1",onReceiveFunc:Function=null)
+		public function As3UTF8SocketServer(onReceiveFunc:Function=null,PORT:int=9999, IP:String="127.0.0.1")
 		{
 			this.onReceiveFunc = onReceiveFunc;
 			this.IP = IP;
@@ -20,7 +20,7 @@ package
 		
 		public static const SPLITER:String = "_$_";
 
-		private var onReceiveFunc:Function;
+		public var onReceiveFunc:Function;
 		protected function onConnectME(e:ServerSocketConnectEvent):void
 		{
 			if(c){
@@ -28,7 +28,7 @@ package
 				c.close();
 			}
 			alert("新的客户端信息："+e.socket.remoteAddress+":"+e.socket.remotePort);
-			c = new As3UTF8SocketClient(e.socket);
+			c = new As3UTF8SocketClient(null,IP,PORT,e.socket);
 			c.addEventListener(As3UTF8SocketEvent.MESSAGE_RECEIVED,receive);
 		}
 		protected function receive(e:As3UTF8SocketEvent):void
@@ -37,7 +37,7 @@ package
 		}
 		protected function alert(str:String):void
 		{
-			dispatchEvent(new DataEvent(SOCKET_ALERT,false,false,str));
+			dispatchEvent(new DataEvent(SOCKET_INFO,false,false,str));
 		}
 		public function send(str:String):void{
 			if(c){
@@ -46,7 +46,7 @@ package
 				alert("无法发送信息，等待客户端连接...");
 			}
 		}
-		public static const SOCKET_ALERT:String = "SOCKET_ALERT";
+		public static const SOCKET_INFO:String = "SOCKET_INFO";
 
 		private var c:As3UTF8SocketClient;
 	}

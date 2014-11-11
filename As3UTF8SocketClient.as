@@ -12,9 +12,12 @@ package
 	{
 		public var PORT:int;
 		public var IP:String;
-		public function As3UTF8SocketClient(warpSocket:Socket=null)
+		public function As3UTF8SocketClient(onReceiveFunc:Function=null,ip:String="127.0.0.1",port:int=9999,warpSocket:Socket=null)
 		{
 			super();
+			PORT = port;
+			IP = ip;
+			this.onReceiveFunc = onReceiveFunc;
 			this.msg = "";
 			s = warpSocket ? warpSocket  : new Socket();
 			
@@ -23,11 +26,16 @@ package
 			s.addEventListener(ProgressEvent.SOCKET_DATA,socketData);
 			s.addEventListener(IOErrorEvent.IO_ERROR,err);
 			s.addEventListener(SecurityErrorEvent.SECURITY_ERROR,err);
+			
+			if(!warpSocket){
+				connect(ip,port);
+			}
 		}
 		public function connect(ip:String,port:int):void
 		{
 			PORT = port;
 			IP = ip;
+			if(s==null) s=new Socket();
 			try{
 				s.connect(ip,port);
 			}catch(e:Error){
@@ -36,7 +44,7 @@ package
 		}
 		protected function alert(str:String):void
 		{
-			dispatchEvent(new DataEvent(SOCKET_ALERT,false,false,str));
+			dispatchEvent(new DataEvent(SOCKET_INFO,false,false,str));
 		}
 		protected function err(e:IOErrorEvent):void
 		{
@@ -60,6 +68,7 @@ package
 			{
 				if(i < parts.length-1){
 					msg += parts[i];
+					if(onReceiveFunc)onReceiveFunc(msg);
 					this.dispatchEvent(new As3UTF8SocketEvent(As3UTF8SocketEvent.MESSAGE_RECEIVED,msg));
 					this.msg = ""; 
 				}else{
@@ -85,7 +94,9 @@ package
 		public static var SPLITER:String = "_$_";
 		private var _message:String;
 		private var s:Socket;
-		public static const SOCKET_ALERT:String = "SOCKET_ALERT";
+		public static const SOCKET_INFO:String = "SOCKET_INFO";
 		private var msg:String;
+
+		private var onReceiveFunc:Function;
 	}
 }
