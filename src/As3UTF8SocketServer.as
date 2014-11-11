@@ -8,7 +8,7 @@ package
 	{
 		public var PORT:int;
 		public var IP:String;
-		public function As3UTF8SocketServer(onReceiveFunc:Function=null,PORT:int=9999, IP:String="127.0.0.1")
+		public function As3UTF8SocketServer(IP:String="127.0.0.1",PORT:int=9999, onReceiveFunc:Function=null)
 		{
 			this.onReceiveFunc = onReceiveFunc;
 			this.IP = IP;
@@ -28,7 +28,7 @@ package
 				c.close();
 			}
 			alert("新的客户端信息："+e.socket.remoteAddress+":"+e.socket.remotePort);
-			c = new As3UTF8SocketClient(null,IP,PORT,e.socket);
+			c = new As3UTF8SocketClient(IP,PORT,null,e.socket);
 			c.addEventListener(As3UTF8SocketEvent.MESSAGE_RECEIVED,receive);
 		}
 		protected function receive(e:As3UTF8SocketEvent):void

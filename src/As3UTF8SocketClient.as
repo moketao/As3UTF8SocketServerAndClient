@@ -12,7 +12,7 @@ package
 	{
 		public var PORT:int;
 		public var IP:String;
-		public function As3UTF8SocketClient(onReceiveFunc:Function=null,ip:String="127.0.0.1",port:int=9999,warpSocket:Socket=null)
+		public function As3UTF8SocketClient(ip:String="127.0.0.1",port:int=9999,onReceiveFunc:Function=null,warpSocket:Socket=null)
 		{
 			super();
 			PORT = port;
