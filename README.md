@@ -20,10 +20,10 @@ server = new As3UTF8SocketServer("127.0.0.1",9999,function(msgFromClient:String)
 ####客户端使用方法：
 <pre>
 c = new As3UTF8SocketClient("127.0.0.1",9999,function(msgFromServer:String):void{
-	trace(msgFromServer);
+	trace(msgFromServer);//收到
 });
 setTimeout(function():void{
-	c.send("hello server");
+	c.send("hello server");//发送
 },1000);
 </pre>
 
